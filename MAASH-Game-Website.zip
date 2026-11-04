@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAASH - Android Games</title>
+
+<style>
+:root {
+    --bg:#0d1018;
+    --panel:#171d2a;
+    --panel2:#202839;
+    --green:#00e5a0;
+    --text:#ffffff;
+    --muted:#a5adbd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+    min-height:75px;
+    padding:15px 6%;
+    background:#151b27;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    border-bottom:1px solid #293144;
+}
+.logo{
+    font-size:30px;
+    font-weight:900;
+    color:var(--green);
+    letter-spacing:2px;
+}
+nav{display:flex;gap:10px}
+nav button{
+    background:transparent;
+    border:0;
+    color:white;
+    padding:10px 14px;
+    border-radius:7px;
+}
+nav button:hover{background:#293144}
+.hero{
+    padding:75px 6%;
+    text-align:center;
+    background:linear-gradient(120deg,#102c35,#211c42,#142a39);
+}
+.hero h1{
+    font-size:clamp(30px,5vw,48px);
+    margin-bottom:15px;
+}
+.hero p{color:#c0c8d5;margin-bottom:25px}
+.search-box{
+    width:90%;
+    max-width:570px;
+    padding:16px;
+    border:1px solid #38445a;
+    border-radius:9px;
+    outline:none;
+    background:#fff;
+    color:#111;
+}
+.container{padding:35px 6%}
+.heading{
+    font-size:25px;
+    margin-bottom:20px;
+}
+.categories{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:32px;
+}
+.category{
+    background:var(--panel);
+    color:white;
+    border:1px solid #343e51;
+    border-radius:25px;
+    padding:10px 18px;
+}
+.category.active,.category:hover{
+    background:var(--green);
+    color:#07150f;
+    border-color:var(--green);
+}
+.games{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    gap:20px;
+}
+.card{
+    background:var(--panel);
+    border:1px solid #293144;
+    border-radius:13px;
+    overflow:hidden;
+    transition:.2s;
+}
+.card:hover{transform:translateY(-5px);border-color:var(--green)}
+.cover{
+    width:100%;
+    height:155px;
+    object-fit:cover;
+    background:#293144;
+}
+.card-body{padding:15px}
+.card h3{margin-bottom:8px}
+.card p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:12px;
+}
+.badge{
+    display:inline-block;
+    background:#263c3a;
+    color:var(--green);
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    margin-bottom:10px;
+}
+.download{
+    display:block;
+    width:100%;
+    padding:12px;
+    text-align:center;
+    background:var(--green);
+    color:#06140e;
+    border:0;
+    border-radius:7px;
+    font-weight:bold;
+    text-decoration:none;
+}
+.download:hover{background:#8bffd9}
+.empty{
+    color:var(--muted);
+    padding:25px 0;
+}
+footer{
+    background:#151b27;
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+    margin-top:50px;
+    line-height:2;
+}
+
+/* ADMIN */
+.admin-section{
+    display:none;
+    padding:30px 6%;
+}
+.admin-box{
+    max-width:850px;
+    margin:auto;
+    background:var(--panel);
+    border:1px solid #303b50;
+    padding:25px;
+    border-radius:14px;
+}
+.admin-box h2{margin-bottom:20px}
+.form-group{margin-bottom:15px}
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    color:#d4d9e4;
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:13px;
+    background:#252e40;
+    border:1px solid #39465c;
+    color:white;
+    border-radius:7px;
+    outline:none;
+}
+.form-group textarea{min-height:90px;resize:vertical}
+.primary{
+    background:var(--green);
+    color:#06140e;
+    border:0;
+    padding:12px 20px;
+    border-radius:7px;
+    font-weight:bold;
+}
+.secondary{
+    background:#303b50;
+    color:white;
+    border:0;
+    padding:10px 15px;
+    border-radius:7px;
+}
+.danger{
+    background:#e94c60;
+    color:white;
+    border:0;
+    padding:9px 13px;
+    border-radius:6px;
+}
+.admin-list{margin-top:30px}
+.admin-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#222b3c;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+}
+.admin-item img{
+    width:55px;
+    height:55px;
+    object-fit:cover;
+    border-radius:7px;
+}
+.admin-item .info{flex:1;min-width:0}
+.admin-item .info p{color:var(--muted);font-size:12px;margin-top:5px}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+.preview{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    display:none;
+    border-radius:8px;
+    margin-top:10px;
+}
+.notice{
+    color:#ffc76b;
+    background:#392f1d;
+    padding:12px;
+    border-radius:7px;
+    margin-bottom:18px;
+    font-size:13px;
+    line-height:1.5;
+}
+.hidden{display:none!important}
+
+@media(max-width:600px){
+    header{justify-content:center}
+    nav{width:100%;justify-content:center}
+    .hero{padding:55px 5%}
+    .container{padding:25px 5%}
+    .games{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .cover{height:120px}
+    .card-body{padding:10px}
+    .card h3{font-size:15px}
+    .admin-item{align-items:flex-start;flex-wrap:wrap}
+    .admin-actions{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MAASH</div>
+    <nav>
+        <button id="homeBtn" type="button">Home</button>
+        <button id="adminBtn" type="button">Admin Panel</button>
+    </nav>
+</header>
+
+<section class="hero" id="hero">
+    <h1>Discover Amazing Android Games</h1>
+    <p>Explore games. Find adventures. Enjoy gaming.</p>
+    <input class="search-box" id="searchInput"
+    type="search" placeholder="Search your favourite game...">
+</section>
+
+<main class="container" id="mainContent">
+
+    <h2 class="heading">Explore Categories</h2>
+
+    <div class="categories" id="categories">
+        <button class="category active" data-category="All">All Games</button>
+        <button class="category" data-category="Action">Action</button>
+        <button class="category" data-category="Racing">Racing</button>
+        <button class="category" data-category="Adventure">Adventure</button>
+        <button class="category" data-category="Puzzle">Puzzle</button>
+        <button class="category" data-category="Sports">Sports</button>
+    </div>
+
+    <h2 class="heading">Popular Android Games</h2>
+    <div class="games" id="gamesContainer"></div>
+
+</main>
+
+<section class="admin-section" id="adminSection">
+    <div class="admin-box">
+
+        <h2>MAASH Admin Dashboard</h2>
+
+        <div class="notice">
+            Demo admin panel: password browser code mein visible hai.
+            Real public website ke liye secure server login zaroori hai.
+            Game details browser ke local storage mein save hongi.
+        </div>
+
+        <form id="gameForm">
+
+            <input type="hidden" id="editId">
+
+            <div class="form-group">
+                <label>Game Name</label>
+                <input id="gameName" required placeholder="Enter game name">
+            </div>
+
+            <div class="form-group">
+                <label>Game Category</label>
+                <select id="gameCategory">
+                    <option>Action</option>
+                    <option>Racing</option>
+                    <option>Adventure</option>
+                    <option>Puzzle</option>
+                    <option>Sports</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Game Image URL</label>
+                <input id="gameImage" placeholder="Paste image URL">
+            </div>
+
+            <div class="form-group">
+                <label>Or Upload Cover Image</label>
+                <input id="imageFile" type="file" accept="image/*">
+                <img id="imagePreview" class="preview" alt="Preview">
+            </div>
+
+            <div class="form-group">
+                <label>APK Download URL</label>
+                <input id="gameLink" type="url"
+                placeholder="https://example.com/game.apk" required>
+            </div>
+
+            <div class="form-group">
+                <label>Game Description</label>
+                <textarea id="gameDescription"
+                placeholder="Write game description"></textarea>
+            </div>
+
+            <button class="primary" type="submit" id="saveBtn">
+                Add Game
+            </button>
+
+            <button class="secondary hidden" type="button" id="cancelEdit">
+                Cancel Edit
+            </button>
+
+        </form>
+
+        <div class="admin-list">
+            <h2>Manage Games</h2>
+            <div id="adminGameList"></div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <h2 style="color:#00e5a0">MAASH</h2>
+    <p>Your Android Gaming Destination</p>
+    <p>© 2026 MAASH. All Rights Reserved.</p>
+</footer>
+
+<script>
+"use strict";
+
+/* STORAGE */
+
+const STORAGE_KEY = "MAASH_GAMES_V2";
+
+const starterGames = [
+    {
+        id:"starter1",
+        name:"Subway Surfers",
+        category:"Adventure",
+        image:"https://placehold.co/500x300/172b42/ffffff?text=Subway+Surfers",
+        link:"",
+        description:"Run, dodge and collect coins.",
+        downloads:0
+    },
+    {
+        id:"starter2",
+        name:"Temple Run 2",
+        category:"Adventure",
+        image:"https://placehold.co/500x300/251b3d/ffffff?text=Temple+Run+2",
+        link:"",
+        description:"An exciting endless running game.",
+        downloads:0
+    },
+    {
+        id:"starter3",
+        name:"Car Racing",
+        category:"Racing",
+        image:"https://placehold.co/500x300/172b42/ffffff?text=Car+Racing",
+        link:"",
+        description:"Enjoy exciting racing challenges.",
+        downloads:0
+    },
+    {
+        id:"starter4",
+        name:"Puzzle Master",
+        category:"Puzzle",
+        image:"https://placehold.co/500x300/251b3d/ffffff?text=Puzzle+Master",
+        link:"",
+        description:"Challenge your brain with puzzles.",
+        downloads:0
+    },
+    {
+        id:"starter5",
+        name:"Action Hero",
+        category:"Action",
+        image:"https://placehold.co/500x300/172b42/ffffff?text=Action+Hero",
+        link:"",
+        description:"Experience exciting action gameplay.",
+        downloads:0
+    },
+    {
+        id:"starter6",
+        name:"Football Stars",
+        category:"Sports",
+        image:"https://placehold.co/500x300/251b3d/ffffff?text=Football+Stars",
+        link:"",
+        description:"Enjoy football gaming.",
+        downloads:0
+    }
+];
+
+function loadGames(){
+    try{
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if(saved){
+            const parsed = JSON.parse(saved);
+            if(Array.isArray(parsed)) return parsed;
+        }
+    }catch(error){
+        console.error("Storage error:",error);
+    }
+    return starterGames.map(game=>({...game}));
+}
+
+let games = loadGames();
+let selectedCategory = "All";
+let uploadedImage = "";
+
+/* SAFE STORAGE */
+
+function saveGames(){
+    try{
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(games));
+        return true;
+    }catch(error){
+        alert("Browser storage full hai. Badi image use na karein.");
+        console.error(error);
+        return false;
+    }
+}
+
+/* ELEMENTS */
+
+const homeBtn = document.getElementById("homeBtn");
+const adminBtn = document.getElementById("adminBtn");
+const hero = document.getElementById("hero");
+const mainContent = document.getElementById("mainContent");
+const adminSection = document.getElementById("adminSection");
+const searchInput = document.getElementById("searchInput");
+const gamesContainer = document.getElementById("gamesContainer");
+const categories = document.getElementById("categories");
+const gameForm = document.getElementById("gameForm");
+const imageFile = document.getElementById("imageFile");
+const imagePreview = document.getElementById("imagePreview");
+
+/* NAVIGATION */
+
+function showHome(){
+    adminSection.style.display = "none";
+    hero.style.display = "block";
+    mainContent.style.display = "block";
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showAdmin(){
+    const password = prompt("Enter Admin Password:");
+
+    if(password === null) return;
+
+    if(password !== "maash123"){
+        alert("Wrong password!");
+        return;
+    }
+
+    hero.style.display = "none";
+    mainContent.style.display = "none";
+    adminSection.style.display = "block";
+
+    renderAdminGames();
+
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+homeBtn.addEventListener("click",showHome);
+adminBtn.addEventListener("click",showAdmin);
+
+/* CATEGORIES */
+
+categories.addEventListener("click",function(event){
+    const button = event.target.closest("button[data-category]");
+    if(!button) return;
+
+    selectedCategory = button.dataset.category;
+
+    document.querySelectorAll(".category").forEach(btn=>{
+        btn.classList.toggle("active",btn === button);
+    });
+
+    renderGames();
+});
+
+/* SEARCH */
+
+searchInput.addEventListener("input",renderGames);
+
+/* RENDER GAMES */
+
+function renderGames(){
+
+    const query = searchInput.value.trim().toLowerCase();
+
+    const filtered = games.filter(game=>{
+        const matchesName = game.name.toLowerCase().includes(query);
+        const matchesCategory =
+            selectedCategory === "All" ||
+            game.category === selectedCategory;
+
+        return matchesName && matchesCategory;
+    });
+
+    gamesContainer.innerHTML = "";
+
+    if(filtered.length === 0){
+        gamesContainer.innerHTML =
+        '<p class="empty">No games found. Try another search.</p>';
+        return;
+    }
+
+    filtered.forEach(game=>{
+
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const img = document.createElement("img");
+        img.className = "cover";
+        img.src = game.image || "https://placehold.co/500x300?text=MAASH";
+        img.alt = game.name;
+        img.onerror = function(){
+            this.src = "https://placehold.co/500x300/222/fff?text=MAASH";
+        };
+
+        const body = document.createElement("div");
+        body.className = "card-body";
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = game.category;
+
+        const title = document.createElement("h3");
+        title.textContent = game.name;
+
+        const description = document.createElement("p");
+        description.textContent = game.description || "Android game.";
+
+        const count = document.createElement("p");
+        count.textContent = "Downloads: " + (game.downloads || 0);
+
+        const link = document.createElement("a");
+        link.className = "download";
+        link.textContent = "Download APK";
+
+        if(game.link){
+            link.href = game.link;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+
+            link.addEventListener("click",()=>{
+                game.downloads = (game.downloads || 0) + 1;
+                saveGames();
+                count.textContent = "Downloads: " + game.downloads;
+            });
+        }else{
+            link.href = "#";
+            link.addEventListener("click",event=>{
+                event.preventDefault();
+                alert("Is game ka APK link abhi add nahi hua hai.");
+            });
+        }
+
+        body.append(badge,title,description,count,link);
+        card.append(img,body);
+        gamesContainer.appendChild(card);
+    });
+}
+
+/* IMAGE UPLOAD */
+
+imageFile.addEventListener("change",function(){
+
+    const file = this.files[0];
+
+    if(!file) return;
+
+    if(!file.type.startsWith("image/")){
+        alert("Please select an image.");
+        this.value = "";
+        return;
+    }
+
+    if(file.size > 500000){
+        alert("Image 500 KB se chhoti rakhein.");
+        this.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(){
+        uploadedImage = reader.result;
+        imagePreview.src = uploadedImage;
+        imagePreview.style.display = "block";
+        document.getElementById("gameImage").value = "";
+    };
+
+    reader.readAsDataURL(file);
+});
+
+/* ADD AND EDIT GAME */
+
+gameForm.addEventListener("submit",function(event){
+
+    event.preventDefault();
+
+    const editId = document.getElementById("editId").value;
+    const name = document.getElementById("gameName").value.trim();
+    const category = document.getElementById("gameCategory").value;
+    const imageURL = document.getElementById("gameImage").value.trim();
+    const link = document.getElementById("gameLink").value.trim();
+    const description = document.getElementById("gameDescription").value.trim();
+
+    if(!name || !link){
+        alert("Game name aur APK URL zaroor bharein.");
+        return;
+    }
+
+    if(!/^https?:\/\//i.test(link)){
+        alert("APK URL http:// ya https:// se shuru hona chahiye.");
+        return;
+    }
+
+    const image = uploadedImage || imageURL ||
+    "https://placehold.co/500x300/172b42/ffffff?text=MAASH";
+
+    if(editId){
+
+        const index = games.findIndex(game=>game.id === editId);
+
+        if(index !== -1){
+            games[index] = {
+                ...games[index],
+                name,
+                category,
+                image,
+                link,
+                description
+            };
+        }
+
+    }else{
+
+        games.unshift({
+            id:"game_" + Date.now(),
+            name,
+            category,
+            image,
+            link,
+            description,
+            downloads:0
+        });
+    }
+
+    if(!saveGames()) return;
+
+    resetForm();
+    renderGames();
+    renderAdminGames();
+
+    alert(editId ? "Game updated successfully!" : "Game added successfully!");
+});
+
+/* ADMIN GAME LIST */
+
+function renderAdminGames(){
+
+    const list = document.getElementById("adminGameList");
+    list.innerHTML = "";
+
+    if(games.length === 0){
+        list.textContent = "No games added yet.";
+        return;
+    }
+
+    games.forEach(game=>{
+
+        const row = document.createElement("div");
+        row.className = "admin-item";
+
+        const img = document.createElement("img");
+        img.src = game.image;
+        img.alt = "";
+
+        const info = document.createElement("div");
+        info.className = "info";
+
+        const title = document.createElement("strong");
+        title.textContent = game.name;
+
+        const detail = document.createElement("p");
+        detail.textContent = game.category + " | Downloads: " + (game.downloads || 0);
+
+        info.append(title,detail);
+
+        const actions = document.createElement("div");
+        actions.className = "admin-actions";
+
+        const edit = document.createElement("button");
+        edit.className = "secondary";
+        edit.textContent = "Edit";
+        edit.type = "button";
+        edit.addEventListener("click",()=>editGame(game.id));
+
+        const remove = document.createElement("button");
+        remove.className = "danger";
+        remove.textContent = "Delete";
+        remove.type = "button";
+        remove.addEventListener("click",()=>deleteGame(game.id));
+
+        actions.append(edit,remove);
+        row.append(img,info,actions);
+        list.appendChild(row);
+    });
+}
+
+/* EDIT */
+
+function editGame(id){
+
+    const game = games.find(item=>item.id === id);
+    if(!game) return;
+
+    document.getElementById("editId").value = game.id;
+    document.getElementById("gameName").value = game.name;
+    document.getElementById("gameCategory").value = game.category;
+    document.getElementById("gameImage").value =
+        game.image.startsWith("data:") ? "" : game.image;
+    document.getElementById("gameLink").value = game.link;
+    document.getElementById("gameDescription").value = game.description;
+
+    uploadedImage = game.image.startsWith("data:") ? game.image : "";
+
+    if(uploadedImage){
+        imagePreview.src = uploadedImage;
+        imagePreview.style.display = "block";
+    }else{
+        imagePreview.style.display = "none";
+    }
+
+    document.getElementById("saveBtn").textContent = "Update Game";
+    document.getElementById("cancelEdit").classList.remove("hidden");
+
+    document.getElementById("gameForm").scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+/* DELETE */
+
+function deleteGame(id){
+
+    if(!confirm("Are you sure you want to delete this game?")) return;
+
+    games = games.filter(game=>game.id !== id);
+
+    if(!saveGames()) return;
+
+    renderGames();
+    renderAdminGames();
+}
+
+/* RESET FORM */
+
+function resetForm(){
+
+    gameForm.reset();
+
+    document.getElementById("editId").value = "";
+    document.getElementById("saveBtn").textContent = "Add Game";
+    document.getElementById("cancelEdit").classList.add("hidden");
+
+    uploadedImage = "";
+    imagePreview.src = "";
+    imagePreview.style.display = "none";
+}
+
+document.getElementById("cancelEdit").addEventListener("click",resetForm);
+
+/* START */
+
+renderGames();
+
+</script>
+
+</body>
+</html>
